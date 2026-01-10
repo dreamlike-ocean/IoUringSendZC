@@ -26,7 +26,10 @@ public class Main {
                 .childOption(IoUringChannelOption.IO_URING_WRITE_ZERO_COPY_THRESHOLD, HttpServer.BIG_BUF.capacity())
                 .childOption(IoUringChannelOption.IO_URING_BUFFER_GROUP_ID, (short) 1)
                 .childHandler(HttpServer.childHandler())
-                .bind(4399)
-                .await();
+                .bind(80)
+                .sync();
+        if (!channelFuture.isSuccess()) {
+            channelFuture.cause().printStackTrace();
+        }
     }
 }

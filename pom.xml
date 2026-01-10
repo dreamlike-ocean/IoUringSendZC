@@ -16,7 +16,7 @@
     </properties>
     <profiles>
         <profile>
-            <id>patch-netty</id>
+            <id>original-netty</id>
             <build>
                 <plugins>
                     <plugin>

@@ -32,6 +32,10 @@ import static io.netty.channel.unix.Errors.ioResult;
 
 public final class IoUringSocketChannel extends AbstractIoUringStreamChannel implements SocketChannel {
 
+    static {
+        System.out.println("patch!");
+    }
+
     public static final boolean enable_report = Boolean.parseBoolean(System.getProperty("io.netty.uring.enable_report", "false"));
     private final IoUringSocketChannelConfig config;
 
