@@ -41,15 +41,7 @@ The benchmark uses `oha` with HTTP/1.1, 100 connections, and a 15-second fixed d
 | 1024 | 7,492.0 | 23,370.4 | +212.0% (3.12x) |
 | 2048 | 2,635.9 | 17,577.3 | +566.8% (6.67x) |
 
-```mermaid
-xychart-beta
-    title "QPS (Requests/sec) vs Chunk Count"
-    x-axis "Chunk count (64 KiB split)" [1, 64, 256, 1024, 2048]
-    y-axis "QPS" 0 --> 24000
-    series "old" [23272.6, 23444.6, 23339.0, 7492.0, 2635.9]
-    series "patch" [23212.9, 23461.6, 23368.0, 23370.4, 17577.3]
-```
-
+![img.png](qps_vs_chunk_count_aligned.jpg)
 ### Analysis
 
 For low chunk counts (1–256), both builds are effectively flat at ~23.2k–23.5k QPS. This suggests the benchmark is not sensitive to the patched send path when the response is only split into a small number of pieces.
@@ -90,7 +82,7 @@ mvn clean package -Poriginal-netty
 
 ## 压测方式与结果
 
-压测使用 `oha`：HTTP/1.1，100 并发连接，持续 15 秒。每个请求访问 `/<count>`，返回 64 KiB 数据；输出文件保存在 `benchmark/` 目录，并以 `*_64k_result.txt` 命名。这里的 `count` 不是并发数，而是把 64 KiB 响应拆成多少个小块（`1`、`64`、`256`、`1024`、`2048`）。该设置用于模拟大量小 buffer 聚合后通过 writev/sendmsg_zc 进行批量发送的负载。
+压测使用 `oha`：HTTP/1.1，100 并发连接，持续 15 秒。每个请求访问 `/count`，返回 64 KiB 数据；输出文件保存在 `benchmark/` 目录，并以 `*_64k_result.txt` 命名。这里的 `count` 不是并发数，而是把 64 KiB 响应拆成多少个小块（`1`、`64`、`256`、`1024`、`2048`）。该设置用于模拟大量小 buffer 聚合后通过 writev/sendmsg_zc 进行批量发送的负载。
 
 ### 测试环境
 
@@ -99,7 +91,18 @@ mvn clean package -Poriginal-netty
 
 ### QPS 结果与趋势
 
-从表格和折线图可见，在低拆分数量（1~256）区间，patch 与旧版几乎相同，均维持在 23.2k~23.5k QPS 左右，差异极小，说明在“小包聚合程度不高”的场景下该 patch 对吞吐影响不明显。
+
+| Chunk count (64 KiB split) | Old Netty QPS | Patch QPS | Delta |
+| --- | --- | --- | --- |
+| 1 | 23,272.6 | 23,212.9 | -0.3% |
+| 64 | 23,444.6 | 23,461.6 | +0.1% |
+| 256 | 23,339.0 | 23,368.0 | +0.1% |
+| 1024 | 7,492.0 | 23,370.4 | +212.0% (3.12x) |
+| 2048 | 2,635.9 | 17,577.3 | +566.8% (6.67x) |
+
+![img.png](qps_vs_chunk_count_aligned.jpg)
+
+从表格和折线图可见，在低拆分数量（1-256）区间，patch 与旧版几乎相同，均维持在 23.2k-23.5k QPS 左右，差异极小，说明在“小包聚合程度不高”的场景下该 patch 对吞吐影响不明显。
 
 当拆分数量提高到 1024 时，旧版吞吐明显下降到约 7.5k QPS，而 patch 仍保持在 23.4k QPS 左右，提升约 3.12 倍。拆分数量为 2048 时差异进一步扩大：旧版约 2.6k QPS，patch 约 17.6k QPS，提升约 6.67 倍。这说明在“header + body 混合”的大多数 HTTP 负载里，如果把大量很小的 buffer 也一并纳入 zerocopy 批量发送，会引入额外的元数据/回收通知处理开销，从而限制整体收益。
 

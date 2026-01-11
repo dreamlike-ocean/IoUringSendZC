@@ -11,7 +11,7 @@ if [ -z "$HOST" ] || [ -z "$OUT_PREFIX" ]; then
   exit 1
 fi
 
-COUNTS=(1 4 16 64)
+COUNTS=(1 64 256 1024 2048)
 
 for count in "${COUNTS[@]}"; do
   oha \
