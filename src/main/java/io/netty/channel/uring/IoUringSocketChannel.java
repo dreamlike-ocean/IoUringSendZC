@@ -36,7 +36,6 @@ public final class IoUringSocketChannel extends AbstractIoUringStreamChannel imp
         System.out.println("patch!");
     }
 
-    public static final boolean enable_report = Boolean.parseBoolean(System.getProperty("io.netty.uring.enable_report", "false"));
     private final IoUringSocketChannelConfig config;
 
     public IoUringSocketChannel() {
@@ -279,10 +278,6 @@ public final class IoUringSocketChannel extends AbstractIoUringStreamChannel imp
                     }
                 }
             } else {
-                if (IoUringSocketChannel.enable_report) {
-                    boolean isCopy = (res & Native.IORING_NOTIF_USAGE_ZC_COPIED) != 0;
-                    System.out.println("zc_notify: " + (isCopy ? "COPIED" : "MOVED"));
-                }
                 if (zcWriteQueue != null) {
                     for (;;) {
                         Object queued = zcWriteQueue.remove();

@@ -7,7 +7,7 @@ import io.netty.channel.MultiThreadIoEventLoopGroup;
 import io.netty.channel.uring.*;
 
 public class Main {
-    static void main() throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         IoUringIoHandlerConfig ioUringIoHandlerConfig = new IoUringIoHandlerConfig();
         ioUringIoHandlerConfig.setBufferRingConfig(
                 IoUringBufferRingConfig.builder()
