@@ -16,8 +16,9 @@ COUNTS=(1 4 16 64)
 for count in "${COUNTS[@]}"; do
   oha \
     --http-version 1.1 \
-    -c 400 \
-    -z 2s \
+    --no-tui \
+    -c 100 \
+    -z 15s \
     "http://${HOST}/${count}" \
     -o "benchmark/${OUT_PREFIX}_${count}_64k_result.txt"
 done

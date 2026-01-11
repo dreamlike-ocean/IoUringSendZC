@@ -17,6 +17,8 @@ public class Main {
                         .allocator(new IoUringFixedBufferRingAllocator(4 * 1024))
                         .build()
         );
+        // linux max
+        ioUringIoHandlerConfig.setCqSize(32768 * 2);
         IoHandlerFactory ioHandlerFactory = IoUringIoHandler.newFactory(ioUringIoHandlerConfig);
         MultiThreadIoEventLoopGroup acceptor = new MultiThreadIoEventLoopGroup(1, ioHandlerFactory);
         MultiThreadIoEventLoopGroup worker = new MultiThreadIoEventLoopGroup(Runtime.getRuntime().availableProcessors(), ioHandlerFactory);

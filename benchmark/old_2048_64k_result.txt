@@ -1,0 +1,48 @@
+Summary:
+  Success rate:	93.03%
+  Total:	15002.6928 ms
+  Slowest:	92.0206 ms
+  Fastest:	9.5416 ms
+  Average:	39.3608 ms
+  Requests/sec:	2635.9268
+
+  Total data:	2.24 GiB
+  Size/request:	64.00 KiB
+  Size/sec:	152.89 MiB
+
+Response time histogram:
+   9.542 ms [1]     |
+  17.790 ms [2817]  |■■■■■■
+  26.037 ms [14308] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  34.285 ms [6198]  |■■■■■■■■■■■■■
+  42.533 ms [306]   |
+  50.781 ms [20]    |
+  59.029 ms [701]   |■
+  67.277 ms [5519]  |■■■■■■■■■■■■
+  75.525 ms [4914]  |■■■■■■■■■■
+  83.773 ms [1716]  |■■■
+  92.021 ms [199]   |
+
+Response time distribution:
+  10.00% in 18.4063 ms
+  25.00% in 22.0578 ms
+  50.00% in 26.6295 ms
+  75.00% in 64.4166 ms
+  90.00% in 71.5787 ms
+  95.00% in 75.7652 ms
+  99.00% in 81.9748 ms
+  99.90% in 87.2244 ms
+  99.99% in 90.3147 ms
+
+
+Details (average, fastest, slowest):
+  DNS+dialup:	2.5891 ms, 1.2332 ms, 57.1596 ms
+  DNS-lookup:	0.0055 ms, 0.0009 ms, 0.0493 ms
+
+Status code distribution:
+  [200] 36699 responses
+
+Error distribution:
+  [2598] error reading a body from connection
+  [151] connection closed before message completed
+  [98] aborted due to deadline
